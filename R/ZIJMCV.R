@@ -50,7 +50,7 @@
 #' @author Taban Baghfalaki \email{t.baghfalaki@gmail.com}, Mojtaba Ganjali \email{m-ganjali@sbu.ac.ir}
 #'
 #'
-#' @example inst/exampleZIMEM.R
+#' @example inst/exampleZIJM.R
 #'
 #' @md
 #' @export
