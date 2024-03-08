@@ -77,17 +77,39 @@ Fits zero-inflated hurdle joint models under Poisson, negative binomial, and gen
 Function using 'JAGS' software to estimate the hurdle joint modeling
 }
 \examples{
+library(survival)
 data(long.data)
 data(surv.data)
 
+\donttest{
 ZISRE(
   FixedY = Y1 ~ x1 + x2 + obstime, RandomY = ~obstime, GroupY = ~id,
   FixedZ = ~ x1 + x2 + obstime, RandomZ = ~obstime, GroupZ = ~id,
-  formSurv = survival::Surv(survtime, death) ~ w1,
+  formSurv = Surv(survtime, death) ~ w1,
   dataLong = long.data, dataSurv = surv.data,
-  n.chains = 1,
-  n.iter = 200, n.burnin = 100, n.thin = 1, family = "GP"
+  n.chains = 2,
+  n.iter = 200, n.burnin = 100, n.thin = 1, family = "Poisson"
 )
+
+
+  ZISRE(
+    FixedY = Y1 ~ x1 + x2 + obstime, RandomY = ~obstime, GroupY = ~id,
+    FixedZ = ~ x1 + x2 + obstime, RandomZ = ~obstime, GroupZ = ~id,
+    formSurv = Surv(survtime, death) ~ w1,
+    dataLong = long.data, dataSurv = surv.data,
+    n.chains = 2,
+    n.iter = 200, n.burnin = 100, n.thin = 1, family = "NB"
+  )
+
+  ZISRE(
+    FixedY = Y1 ~ x1 + x2 + obstime, RandomY = ~obstime, GroupY = ~id,
+    FixedZ = ~ x1 + x2 + obstime, RandomZ = ~obstime, GroupZ = ~id,
+    formSurv = Surv(survtime, death) ~ w1,
+    dataLong = long.data, dataSurv = surv.data,
+    n.chains = 2,
+    n.iter = 200, n.burnin = 100, n.thin = 1, family = "GP"
+  )
+}
 }
 \author{
 Taban Baghfalaki \email{t.baghfalaki@gmail.com}, Mojtaba Ganjali \email{m-ganjali@sbu.ac.ir}

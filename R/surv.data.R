@@ -9,7 +9,7 @@
 #'   \item{id}{patients identifier}
 #'   \item{survtime}{survival time (the response variable)}
 #'   \item{death}{censoring indicator, 1=observed, 0=censored}
-#'   \item{w1}{a continoues covariate}
+#'   \item{w1}{a continuous covariate}
 #' }
 #' @seealso \code{\link{ZI}}
 "surv.data"

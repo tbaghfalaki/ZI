@@ -9,14 +9,8 @@
 #'
 #' @author Taban Baghfalaki \email{t.baghfalaki@gmail.com}, Mojtaba Ganjali \email{m-ganjali@sbu.ac.ir}
 #'
-#' @references
-#' \enumerate{
-#' \item
-#' Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). A Unified Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcome.
+#' @references Ganjali, M. & Baghfalaki, T. & Balakrishnan, N. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcome with Applications in Dynamic Prediction.
 #'
-#' \item
-#' Ganjali, M. & Baghfalaki, T. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcome with Applications in Dynamic Prediction.
-#' }
 #' @name ZI
 #'
 NULL
