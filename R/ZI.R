@@ -1,0 +1,22 @@
+#' ZI Package
+#'
+#' @description
+#' Run a Gibbs sampler for hurdle models. The package includes the usual zero-inflated generalized linear model under Gaussian, Gamma, inverse Gaussian, Poisson, negative binomial, logarithmic, logistic, and binomial distributional assumptions. The longitudinal zero-inflated models include Poisson, generalized Poisson, and negative binomial distributions. The main component of this package involves estimating joint models for zero-inflated longitudinal measurements and time-to-event data under Poisson, generalized Poisson, and negative binomial distributions. The function "ZIJM" considers joint modeling with a proportional hazard sub-model and a piecewise constant baseline hazard by treating the current value as the association between two sub-models. The function "ZISRE" considers joint modeling with a Weibull sub-model by incorporating a shared random effects model.
+#'
+#' @docType package
+#'
+#' @keywords ZI
+#'
+#' @author Taban Baghfalaki \email{t.baghfalaki@gmail.com}, Mojtaba Ganjali \email{m-ganjali@sbu.ac.ir}
+#'
+#' @references
+#' \enumerate{
+#' \item
+#' Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). A Unified Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcome.
+#'
+#' \item
+#' Ganjali, M. & Baghfalaki, T. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcome with Applications in Dynamic Prediction.
+#' }
+#' @name ZI
+#'
+NULL

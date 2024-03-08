@@ -1,0 +1,18 @@
+Package: ZI
+Type: Package
+Title: Zero-Inflated Hurdle Joint Modeling
+Version: 0.2.2
+Authors@R: c(
+  person("Taban", "Baghfalaki", email = "t.baghfalaki@gmail.com", role =c("cre","aut"), comment = c(ORCID = "0000-0002-2100-4532")),
+  person("Mojtaba", "Ganjali", email = "m-Ganjali@sbu.ac.ir", role = "aut", comment = c(ORCID = "0000-0002-8574-1750")),
+  person("Narayanaswamy", "Balakrishnan", email = "bala@mcmaster.ca", role = "aut"))
+Maintainer: Taban Baghfalaki <t.baghfalaki@gmail.com>
+URL: https://github.com/tbaghfalaki/ZI
+Description: Run a Gibbs sampler for hurdle models. The package includes the longitudinal zero-inflated hurdle models. The longitudinal zero-inflated models include Poisson, generalized Poisson, and negative binomial distributions. The primary focus of this package is to estimate joint models for zero-inflated longitudinal measurements and time-to-event data under Poisson, generalized Poisson, and negative binomial distributions. The function "ZIJM" considers joint modeling with a proportional hazard sub-model and a piecewise constant baseline hazard by treating the current value as the association between the two sub-models. The function "ZISRE" involves joint modeling with a Weibull sub-model by incorporating a shared random effects model.
+License: GPL (>= 2.0)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.0
+Imports: stats, jagsUI, numbers
+Depends: R (>= 4.0.0)
+SystemRequirements: JAGS 4.x.y
