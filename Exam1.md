@@ -48,7 +48,7 @@ GroupZ = ~id
 formSurv = Surv(survtime, death) ~ w1 + w2,
 ```
 
-This versatile package supports a wide range of distributional assumptions, encompassing Gaussian, Gamma, inverse Gaussian, Weibull, exponential, beta, Poisson, negative binomial, logarithmic, Bell, generalized Poisson, and binomial distributions. Further elaboration on the model's specifics can be found in Ganjali et al. (2024).
+This versatile package supports a wide range of distributional assumptions, encompassing Poisson, negative binomial, and generalized Poisson. Further elaboration on the model's specifics can be found in Ganjali et al. (2024).
 
 These joint models are operationalized through two pivotal functions: (1) "ZIJMCV", facilitating joint modeling with a proportional hazard sub-model and a piecewise constant baseline hazard, considering associations based on the current values, and (2) "ZISRE," enabling joint modeling with a Weibull sub-model by incorporating a shared random effects model. At first, we consider the first one:
 
@@ -157,80 +157,18 @@ For the share random effects, the function ZISRE has the following arguments:
 
 As an example, consider the following command, where this implementation has been performed on training data:
 ```
-set.seed(2)
-  INDTRAIN <- sample(surv_data_e$id, 0.7 * (dim(surv_data_e)[1]))
-  INDVALID <- surv_data_e$id[-INDTRAIN]
-  dataLong_t <- subset(
-    long_data_e,
-    long_data_e$id %in% INDTRAIN
-  )
-  dataSurv_t <- subset(
-    surv_data_e,
-    surv_data_e$id %in% INDTRAIN
-  )
-  names(dataSurv_t)
-
-  dataLong_v <- subset(
-    long_data_e,
-    long_data_e$id %in% INDVALID
-  )
-  dataSurv_v <- subset(
-    surv_data_e,
-    surv_data_e$id %in% INDVALID
-  )
-
-
+  data(long_data_nb)
+  data(surv_data_nb)
   Z1 <- ZISRE(
     FixedY = Y1 ~ x1 + x2 + obstime, RandomY = ~obstime, GroupY = ~id,
     FixedZ = ~ x1 + x2 + obstime, RandomZ = ~obstime, GroupZ = ~id,
-    formSurv = Surv(survtime, death) ~ w1,
-    dataLong = dataLong_t, dataSurv = dataSurv_t,
+    formSurv = Surv(survtime, death) ~ w1, IStructure=TRUE,
     obstime = "obstime", offset = NULL,
+    dataLong = long_data_nb, dataSurv = surv_data_nb,
     n.chains = 2,
-    n.iter = 2000, n.burnin = 1000, n.thin = 1, family = "Exponential"
+    n.iter = 200, n.burnin = 100, n.thin = 1, family = "NB"
   )
 
-```
-A part of the output of this function is as follows: 
-```
-$Estimation
-$Estimation$Y_model
-                   Est         SD       L_CI       U_CI     Rhat
-(Intercept)  0.9610801 0.10669602  0.7610596  1.1562755 2.890635
-x1           0.5646248 0.07778790  0.4059200  0.7160297 1.016472
-x2           0.5314088 0.04833851  0.4320189  0.6207531 1.500519
-obstime     -0.7546451 0.08694646 -0.9253188 -0.5879938 1.351733
-
-$Estimation$Zero_inflated_model
-                    Est         SD       L_CI         U_CI     Rhat
-(Intercept) -0.17257617 0.09292774 -0.3634907  0.001927923 1.022518
-x1          -0.84544404 0.10879313 -1.0567273 -0.642239328 1.178647
-x2          -0.01148273 0.06148162 -0.1317004  0.108729183 1.233322
-obstime      1.03868094 0.08752284  0.8678618  1.208407196 1.126586
-
-$Estimation$Survival_model
-                     Est         SD       L_CI       U_CI     Rhat
-(Intercept) -0.003074646 0.09910825 -0.1885954  0.1863271 2.512048
-w1           0.909595438 0.14609170  0.6651618  1.1905946 3.119033
-(Intercept)  4.081171087 1.68499032  1.3666209  6.7323928 5.548363
-obstime      0.076677448 1.67419538 -2.3656178  3.3874757 4.281811
-(Intercept)  2.939603247 2.37930402 -1.5429257  6.3966420 4.364750
-obstime     -4.787436631 1.80208901 -7.9888266 -1.3260451 2.283047
-Scale        0.731763580 0.10188681  0.5833568  0.9318901 4.087750
-
-$Estimation$D
-            (Intercept)     obstime  (Intercept)      obstime
-(Intercept)  0.18291289  0.16848338 -0.011761110  0.076022046
-obstime      0.16848338  0.17668661 -0.010728000  0.076949456
-(Intercept) -0.01176111 -0.01072800  0.017657126 -0.001174521
-obstime      0.07602205  0.07694946 -0.001174521  0.046796535
-
-
-$DIC
-[1] 6326.464
-
-$LPML
-[1] -2397.208
 ```
 
 Dynamic prediction
