@@ -16,8 +16,7 @@ This analysis is presented [here](/Exam1.md)
 
 ### Implementation with real data
 
-1. Pregnancy Data and AIDS Data
-The code for implementing the applications involves fitting a Zero-Inflated Joint Model and computing the risk prediction. This analyses of data are presented [here](https://github.com/tbaghfalaki/ZIJMApp)
+The code for implementing the applications (Pregnancy Data and AIDS Data) involves fitting a Zero-Inflated Joint Model and computing the risk prediction. This analyses of data are presented [here](https://github.com/tbaghfalaki/ZIJMApp)
 
 
 
