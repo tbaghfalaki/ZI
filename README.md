@@ -14,5 +14,12 @@ This will seamlessly fetch and install the most up-to-date version of ZI for you
 
 This analysis is presented [here](/Exam1.md)
 
+### Implementation with real data
+
+1. Pregnancy Data and AIDS Data
+The code for implementing the applications involves fitting a Zero-Inflated Joint Model and computing the risk prediction. This analyses of data are presented [here](https://github.com/tbaghfalaki/ZIJMApp)
+
+
+
 ### Reference 
 Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcomes with Applications to Dynamic Prediction. *Revised*.
