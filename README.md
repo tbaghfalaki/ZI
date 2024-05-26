@@ -11,4 +11,4 @@ To acquire the latest development version of ZI, you may utilize the following c
 This will seamlessly fetch and install the most up-to-date version of ZI for your use.
 
 ### Reference 
-Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcomes with Applications to Dynamic Prediction. *Submitted*.
+Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcomes with Applications to Dynamic Prediction. *Revised*.
