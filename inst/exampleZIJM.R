@@ -35,4 +35,5 @@ ZIJMCV(
   n.chains = 1,
   n.iter = 200, n.burnin = 100, n.thin = 1, K = 15, family = "NB"
 )
+
 }
