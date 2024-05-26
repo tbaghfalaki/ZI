@@ -2,7 +2,7 @@ Getting Started
 ---------------
 
 ```
-library(UHJM)
+library(ZI)
 ```
 Loading the data from the package includes both longitudinal data in long format and survival data. It's essential to ensure that the same subject (ID) is present in both datasets.
 
