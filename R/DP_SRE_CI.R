@@ -37,7 +37,7 @@
 #' @export
 
 DP_SRE_CI <- function(object, s = s, t = t, mi=10, offset = NULL, n.chains = n.chains, n.iter = n.iter, n.burnin = floor(n.iter / 2),
-                   n.thin = max(1, floor((n.iter - n.burnin) / 1000)), dataLong, dataSurv) {
+                      n.thin = max(1, floor((n.iter - n.burnin) / 1000)), dataLong, dataSurv) {
   Dt <- t
   KK <- 1000000
   offset0=offset
@@ -54,7 +54,7 @@ DP_SRE_CI <- function(object, s = s, t = t, mi=10, offset = NULL, n.chains = n.c
   obstime <- object$obstime
   peice <- object$peice
   family <- object$family
- # offset=dataLong[offset]
+  # offset=dataLong[offset]
 
   ###########
   ###########
@@ -552,38 +552,40 @@ for(k in 1:n2){
 
 
 
+
+
       gamma <- gammas[ttt,]
       p <- ps[ttt]
 
-    model.file <- textConnection(Expb)
+      model.file <- textConnection(Expb)
 
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
 
-    b_mcmc[[ttt]]=b_hat
+      b_mcmc[[ttt]]=b_hat
 
     }
 
@@ -622,6 +624,23 @@ for(k in 1:n2){
       }
     }
 
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
+
+
+
 
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
@@ -654,34 +673,34 @@ for(k in 1:n2){
 
 
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, phi11 = 1 / phi1,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, phi11 = 1 / phi1,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
 
-    b_mcmc[[ttt]]=b_hat
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
   ###
   if (family == "Weibull") {
@@ -711,6 +730,22 @@ for(k in 1:n2){
       }
       if(dim(Z2)[2]==1){
         Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
+
+
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
       }
     }
 
@@ -744,34 +779,34 @@ for(k in 1:n2){
       model.file <- textConnection(Weibullb)
 
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, kappa = kappa,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, kappa = kappa,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
 
-    b_mcmc[[ttt]]=b_hat
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
   ##
   if (family == "inverse.gaussian") {
@@ -808,6 +843,21 @@ for(k in 1:n2){
     }
 
 
+
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
     sigmas <- object$MCMC$sigma[SAMPLE]
@@ -838,34 +888,34 @@ for(k in 1:n2){
 
 
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, lambda = 1 / sigma,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, lambda = 1 / sigma,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
 
-    b_mcmc[[ttt]]=b_hat
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
   ###
   if (family == "Gamma") {
@@ -900,6 +950,21 @@ for(k in 1:n2){
       }
     }
 
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
+
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
     sigmas <- object$MCMC$sigma[SAMPLE]
@@ -930,33 +995,33 @@ for(k in 1:n2){
 
 
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, sigma1 = 1 / sigma,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, sigma1 = 1 / sigma,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
   ####
   if (family == "Gaussian") {
@@ -990,6 +1055,21 @@ for(k in 1:n2){
       }
     }
 
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
+
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
     sigmas <- object$MCMC$sigma[SAMPLE]
@@ -1019,34 +1099,34 @@ for(k in 1:n2){
 
       model.file <- textConnection(Gaussianb)
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, tau = 1 / sigma,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, tau = 1 / sigma,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
 
-    b_mcmc[[ttt]]=b_hat
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
 
   if (family == "Poisson") {
@@ -1080,6 +1160,21 @@ for(k in 1:n2){
       }
     }
 
+
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
 
@@ -1107,33 +1202,33 @@ for(k in 1:n2){
 
       model.file <- textConnection(Poissonb)
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
   ####################### $$$$$$$$$$$$$
   if (family == "Bell") {
@@ -1174,6 +1269,21 @@ for(k in 1:n2){
       }
     }
 
+
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
 
@@ -1204,34 +1314,34 @@ for(k in 1:n2){
         model.file <- textConnection(Bellwcb)
       }
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      C = C,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        C = C,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
 
 
@@ -1266,6 +1376,21 @@ for(k in 1:n2){
       }
     }
 
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
+
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
 
@@ -1293,33 +1418,33 @@ for(k in 1:n2){
 
       model.file <- textConnection(logarb)
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
 
   if (family == "Binomial") {
@@ -1352,6 +1477,21 @@ for(k in 1:n2){
       }
     }
 
+
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
 
@@ -1379,33 +1519,33 @@ for(k in 1:n2){
 
       model.file <- textConnection(binomialb)
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
-    ###############################################
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
+      ###############################################
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
 
   if (family == "NB") {
@@ -1441,6 +1581,20 @@ for(k in 1:n2){
       }
     }
 
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
     rs <- object$MCMC$r[SAMPLE]
@@ -1471,34 +1625,34 @@ for(k in 1:n2){
       model.file <- textConnection(NBb)
 
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, r = r,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, r = r,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
 
 
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
 
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
 
   ############
@@ -1534,7 +1688,20 @@ for(k in 1:n2){
       }
     }
 
-
+    if(IStructure==FALSE){
+      Sigmas <- object$MCMC$Sigma[SAMPLE,,]
+    }else{
+      if(dim(Z2)[2]>1){
+        #object$MCMC$D1[SAMPLE,,]
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE,,]
+      }
+      if(dim(Z2)[2]==1){
+        D1s <- object$MCMC$D1[SAMPLE,,]
+        D2s <- object$MCMC$D2[SAMPLE]
+        #Sigmas <- Matrix::bdiag(object$MCMC$D1[SAMPLE,,],object$MCMC$D2[SAMPLE])
+      }
+    }
     gammas <- object$MCMC$gamma[SAMPLE,]
     ps <- object$MCMC$p[SAMPLE]
     phizs <- object$MCMC$r[SAMPLE]
@@ -1564,32 +1731,32 @@ for(k in 1:n2){
 
       model.file <- textConnection(GPb)
 
-    d.jags <- list(
-      betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
-      p = p, phiz = phiz,
-      n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
-      X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
-      Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
-      XS = XS
-    )
+      d.jags <- list(
+        betaL1 = betaL1, betaL2 = betaL2, betaS = betaS, Omega = solve(Sigma), gamma = gamma,
+        p = p, phiz = phiz,
+        n = n1, zeros = rep(0, n1), n2 = n2, y = y, offset = offset,Time = rep(s, n2), surt.cen = surt.cen, K = 100000,
+        X1 = X1, X2 = X2, Z1 = Z1, Z2 = Z2, z = z,
+        Nb1 = Nb1, Nb2 = Nb2, mub = rep(0, Nb1 + Nb2), id = id_prim,
+        XS = XS
+      )
 
-    sim1 <- jagsUI::jags(
-      data = d.jags,
-      parameters.to.save = parameters,
-      model.file = model.file,
-      n.chains = n.chains,
-      parallel = FALSE,
-      n.adapt = FALSE,
-      n.iter = n.iter,
-      n.burnin = n.burnin,
-      n.thin = 1,
-      DIC = FALSE
-    )
-    b_hat <- sim1$mean$b
-    b_sim <- sim1$sims.list$b
-    b_mcmc[[ttt]]=b_hat
+      sim1 <- jagsUI::jags(
+        data = d.jags,
+        parameters.to.save = parameters,
+        model.file = model.file,
+        n.chains = n.chains,
+        parallel = FALSE,
+        n.adapt = FALSE,
+        n.iter = n.iter,
+        n.burnin = n.burnin,
+        n.thin = 1,
+        DIC = FALSE
+      )
+      b_hat <- sim1$mean$b
+      b_sim <- sim1$sims.list$b
+      b_mcmc[[ttt]]=b_hat
 
-  }
+    }
   }
 
   ###############################
@@ -1607,37 +1774,37 @@ for(k in 1:n2){
 
     gamma <- gammas[ttt,]
     betaS <- betaSs[ttt,]
-  r<-ps[ttt]
+    r<-ps[ttt]
 
-  b <- b_hat
-  mut <- c()
-  for (k in 1:n2) {
-    mut[k] <- inprod(betaS[], XS[k, ]) + inprod(gamma[], b[k, ])
+    b <- b_hat
+    mut <- c()
+    for (k in 1:n2) {
+      mut[k] <- inprod(betaS[], XS[k, ]) + inprod(gamma[], b[k, ])
+    }
+
+
+    Num <- 1 - pweibull((s + Dt), r, exp(-mut / r))
+    Den <- 1 - pweibull(s, r, exp(-mut / r))
+
+    Den[Den == 0] <- 0.0001
+
+
+
+    DP[ttt,]=1 - Num / Den
   }
 
 
-  Num <- 1 - pweibull((s + Dt), r, exp(-mut / r))
-  Den <- 1 - pweibull(s, r, exp(-mut / r))
-
-  Den[Den == 0] <- 0.0001
 
 
 
-  DP[ttt,]=1 - Num / Den
-  }
+  #DP11=DP_SRE(object = object, s = s, t = Dt, offset=offset0, n.chains = 1, n.iter = n.iter, n.burnin = n.burnin,
+  #            n.thin = 1, dataLong = dataLong, dataSurv = dataSurv
+  #)
 
 
 
 
-
-#DP11=DP_SRE(object = object, s = s, t = Dt, offset=offset0, n.chains = 1, n.iter = n.iter, n.burnin = n.burnin,
-#            n.thin = 1, dataLong = dataLong, dataSurv = dataSurv
-#)
-
-
-
-
- # DP_last <- cbind(unique(id), DP11$DP$est, t(apply(DP,2,quantile,c(0.025,0.975))))
+  # DP_last <- cbind(unique(id), DP11$DP$est, t(apply(DP,2,quantile,c(0.025,0.975))))
   DP_last <- cbind(unique(id), apply(DP,2,mean), t(apply(DP,2,quantile,c(0.025,0.975))))
 
   colnames(DP_last) <- c("id", "est","L","U")

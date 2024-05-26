@@ -224,7 +224,7 @@ gamma_pi~dnorm(0,0.001)
 
 
 
-  Beta <- "model{
+Beta <- "model{
 
 
   for(i in 1:n){
@@ -320,7 +320,7 @@ for(l in 1:NbetaS){
 
 
 
-  Gamma1 <- "model{
+Gamma1 <- "model{
 
 
   for(i in 1:n){
@@ -414,7 +414,7 @@ gamma_pi~dnorm(0,0.001)
 
 
 
-  Gamma <- "model{
+Gamma <- "model{
 
 
   for(i in 1:n){
@@ -508,7 +508,7 @@ for(l in 1:NbetaS){
 
 
 
-  Weibull1 <- "model{
+Weibull1 <- "model{
 
 
   for(i in 1:n){
@@ -602,7 +602,7 @@ gamma_pi~dnorm(0,0.001)
 
 
 
-  Weibull <- "model{
+Weibull <- "model{
 
 
   for(i in 1:n){
@@ -695,7 +695,7 @@ for(l in 1:NbetaS){
 
 
 
-  Exp1 <- "model{
+Exp1 <- "model{
 
 
   for(i in 1:n){
@@ -785,7 +785,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  Exp <- "model{
+Exp <- "model{
 
 
   for(i in 1:n){
@@ -876,7 +876,7 @@ for(l in 1:NbetaS){
 
 
 
-  IGauss1 <- "model{
+IGauss1 <- "model{
 
 
   for(i in 1:n){
@@ -973,7 +973,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  IGauss <- "model{
+IGauss <- "model{
 
 
   for(i in 1:n){
@@ -1063,7 +1063,7 @@ for(l in 1:NbetaS){
 
 }"
 
-  Gaussian1 <- "model{
+Gaussian1 <- "model{
 
 
   for(i in 1:n){
@@ -1153,7 +1153,7 @@ sigma<-1/tau
 }"
 
 
-  Gaussian <- "model{
+Gaussian <- "model{
 
 
   for(i in 1:n){
@@ -1246,7 +1246,7 @@ sigma<-1/tau
 
 
 
-  logar <- "model{
+logar <- "model{
 
 
   for(i in 1:n){
@@ -1333,7 +1333,7 @@ for(l in 1:NbetaS){
 
 
 
-  logar1 <- "model{
+logar1 <- "model{
 
 
   for(i in 1:n){
@@ -1416,7 +1416,7 @@ gamma_pi~dnorm(0,0.001)
 
 }"
 
-  binomial1 <- "model{
+binomial1 <- "model{
 
 m<-max(y)
   for(i in 1:n){
@@ -1501,7 +1501,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  binomial <- "model{
+binomial <- "model{
 
 m<-max(y)
   for(i in 1:n){
@@ -1584,8 +1584,8 @@ for(l in 1:NbetaS){
 
 }"
 
-  ###########
-  NB1 <- "model{
+###########
+NB1 <- "model{
 
 
   for(i in 1:n){
@@ -1670,7 +1670,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  Poisson1 <- "model{
+Poisson1 <- "model{
 
 
   for(i in 1:n){
@@ -1753,7 +1753,7 @@ gamma_pi~dnorm(0,0.001)
 
 }"
 
-  GP1 <- "model{
+GP1 <- "model{
 
 
   for(i in 1:n){
@@ -1837,7 +1837,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  NB <- "model{
+NB <- "model{
 
 
   for(i in 1:n){
@@ -1922,7 +1922,7 @@ for(l in 1:NbetaS){
 }"
 
 
-  Poisson <- "model{
+Poisson <- "model{
 
 
   for(i in 1:n){
@@ -2010,7 +2010,7 @@ for(l in 1:NbetaS){
 
 }"
 
-  GP <- "model{
+GP <- "model{
 
 
   for(i in 1:n){
@@ -2094,7 +2094,7 @@ for(l in 1:NbetaS){
 
 }"
 
-  Bell1 <- "model{
+Bell1 <- "model{
 
 
   for(i in 1:n){
@@ -2176,7 +2176,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  Bell <- "model{
+Bell <- "model{
 
 
   for(i in 1:n){
@@ -2265,7 +2265,7 @@ for(l in 1:NbetaS){
 
 
 
-  Bell1wc <- "model{
+Bell1wc <- "model{
 
 
   for(i in 1:n){
@@ -2346,7 +2346,7 @@ gamma_pi~dnorm(0,0.001)
 }"
 
 
-  Bellwc <- "model{
+Bellwc <- "model{
 
 
   for(i in 1:n){
