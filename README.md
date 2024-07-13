@@ -21,4 +21,4 @@ The code for implementing the applications (Pregnancy Data and AIDS Data) involv
 
 
 ### Reference 
-Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcomes with Applications to Dynamic Prediction. *Revised*.
+Ganjali, M., Baghfalaki, T. & Balakrishnan, N. (2024). Joint Modeling of Zero-Inflated Longitudinal Measurements and Time-to-Event Outcomes with Applications to Dynamic Prediction. *SMMR*, accepted.
